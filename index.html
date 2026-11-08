@@ -1,0 +1,1779 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/png" href="https://global.adro.com/cdn/shop/files/favicon.png?crop=center&amp;height=32&amp;v=1739787348&amp;width=32">
+  <meta name="theme-color" content="#17121a">
+  <meta name="description" content="BMW G82 — présentation visuelle avec kit carrosserie ADRO en fibre de carbone.">
+  <title>Adro - BMW M4 G82</title>
+  <style>
+    :root {
+      --ink: #f7f3f8;
+      --muted: rgba(247, 243, 248, .66);
+      --purple: #d9a7e8;
+      --dark: #17121a;
+      --nav-h: 76px;
+    }
+
+    * { box-sizing: border-box; }
+
+    html {
+      background: var(--dark);
+      scroll-behavior: smooth;
+      scroll-snap-type: y mandatory;
+    }
+
+    body {
+      margin: 0;
+      overflow-x: hidden;
+      color: var(--ink);
+      background: var(--dark);
+      font-family: Inter, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; }
+    main { position: relative; }
+
+    /* Progress indicator */
+    .progress-track {
+      position: fixed;
+      z-index: 50;
+      inset: 0 0 auto;
+      height: 2px;
+      background: rgba(255,255,255,.12);
+    }
+
+    .progress-bar {
+      width: 0;
+      height: 100%;
+      background: var(--purple);
+      transform-origin: left;
+    }
+
+    /* Navigation */
+    .topbar,
+    .topbar.scrolled {
+      position: fixed;
+      z-index: 40;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-h);
+      padding: 0 clamp(18px, 4vw, 64px);
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      column-gap: clamp(12px, 2vw, 28px);
+      background: #fff;
+      color: #17121a;
+      box-shadow: 0 5px 24px rgba(12,8,15,.10);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+      animation: nav-enter .75s cubic-bezier(.2,.7,.2,1) both;
+    }
+
+    @keyframes nav-enter {
+      from { opacity: 0; transform: translateY(-12px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .brand {
+      justify-self: start;
+      min-width: 0;
+      display: flex;
+      align-items: center;
+      gap: clamp(10px, 1.2vw, 18px);
+      color: #17121a;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .22em;
+      text-transform: uppercase;
+    }
+
+    .brand-logo {
+      display: block;
+      width: 80px;
+      height: auto;
+      object-fit: contain;
+      filter: brightness(0);
+    }
+
+    .brand img:nth-child(2) {
+      width: 15px;
+      height: 15px;
+      object-fit: contain;
+      margin-left: 12px;
+    }
+
+    .brand-tagline {
+      display: block;
+      color: #242027;
+      font-size: clamp(8px, .72vw, 10px);
+      font-weight: 700;
+      line-height: 1.3;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+
+    .topnav {
+      justify-self: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: clamp(22px, 3.2vw, 48px);
+      white-space: nowrap;
+      color: #242027;
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .topnav a {
+      position: relative;
+      flex: 0 0 auto;
+      padding: 9px 0;
+      color: #242027;
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: .16em;
+      opacity: .76;
+      transition: opacity .25s ease, color .25s ease;
+    }
+
+    .topnav a::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 100%;
+      bottom: 1px;
+      height: 1px;
+      background: #9f5db4;
+      transition: right .3s ease;
+    }
+
+    .topnav a:hover,
+    .topnav a.active { color: #09070b; opacity: 1; }
+    .topnav a:hover::after,
+    .topnav a.active::after { right: 0; }
+
+    .nav-connect {
+      justify-self: end;
+      display: inline-grid;
+      place-items: center;
+      width: 38px;
+      height: 38px;
+      color: #242027;
+      opacity: .78;
+      cursor: default;
+    }
+
+    .nav-connect svg { display: block; width: 20px; height: 20px; }
+
+    /* Full-screen chapters and background imagery */
+    .scene {
+      position: relative;
+      isolation: auto;
+      height: 100svh;
+      min-height: 100svh;
+      overflow: visible;
+      display: flex;
+      align-items: center;
+      background: transparent;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+    }
+
+    .scene::after { display: none; }
+
+    .visual {
+      position: absolute;
+      z-index: 0;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      opacity: 1;
+      pointer-events: none;
+      transition: none;
+      will-change: auto;
+    }
+
+    .visual img {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      transform: none;
+      transition: none;
+      filter: none;
+      will-change: auto;
+    }
+
+    .visual::after {
+      content: "";
+      position: absolute;
+      z-index: 1;
+      inset: 0;
+      pointer-events: none;
+      background:
+        linear-gradient(90deg, rgba(13,9,15,.54), transparent 65%),
+        linear-gradient(0deg, rgba(10,8,12,.34), transparent 40%);
+    }
+
+    .scene.light .visual::after {
+      background:
+        linear-gradient(90deg, rgba(24,17,27,.26), transparent 68%),
+        linear-gradient(0deg, rgba(24,17,27,.14), transparent 44%);
+    }
+
+    .engine-scene .visual::after {
+      background:
+        linear-gradient(90deg, rgba(28,19,31,.58), transparent 74%),
+        linear-gradient(0deg, rgba(28,19,31,.12), transparent 60%);
+    }
+
+    .final-scene .visual::after {
+      background:
+        linear-gradient(270deg, rgba(7,5,9,.45), transparent 78%),
+        linear-gradient(0deg, rgba(7,5,9,.33), transparent 60%);
+    }
+
+    /* Equivalent overlays for viewport-level crossfade copies appended to body. */
+    .visual.is-light-crossfade-layer::after {
+      background:
+        linear-gradient(90deg, rgba(24,17,27,.26), transparent 68%),
+        linear-gradient(0deg, rgba(24,17,27,.14), transparent 44%);
+    }
+
+    .visual.is-aero-crossfade-layer::after {
+      background: linear-gradient(0deg, rgba(20,14,22,.18), transparent 58%);
+    }
+
+    .visual.is-engine-crossfade-layer::after {
+      background:
+        linear-gradient(90deg, rgba(28,19,31,.58), transparent 74%),
+        linear-gradient(0deg, rgba(28,19,31,.12), transparent 60%);
+    }
+
+    .visual.is-final-crossfade-layer::after {
+      background:
+        linear-gradient(270deg, rgba(7,5,9,.45), transparent 78%),
+        linear-gradient(0deg, rgba(7,5,9,.33), transparent 60%);
+    }
+
+    .scene .content {
+      position: fixed;
+      z-index: 30;
+      inset: 0;
+      width: 100%;
+      max-width: none;
+      height: 100svh;
+      margin: 0;
+      padding: clamp(28px, 7vw, 108px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: flex-start;
+      pointer-events: none;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity .3s ease, visibility 0s linear .3s;
+    }
+
+    .scene.is-active .content {
+      opacity: 1;
+      visibility: visible;
+      transition: opacity .3s ease;
+    }
+
+    .scene.is-active .content > * { pointer-events: auto; }
+
+    /* Text entrance animation.
+       translate is deliberately used for slide 2 positioning, so this transform
+       animation can run without cancelling the elements' independent placement. */
+    .reveal {
+      opacity: 0 !important;
+      transform: translate3d(0,28px,0) scale(.99) !important;
+      filter: blur(7px) !important;
+      transition:
+        opacity .8s cubic-bezier(.2,.7,.2,1),
+        transform .95s cubic-bezier(.2,.7,.2,1),
+        filter .8s ease !important;
+      will-change: opacity, transform, filter;
+    }
+
+    .scene.is-active .reveal {
+      opacity: 1 !important;
+      transform: translate3d(0,0,0) scale(1) !important;
+      filter: blur(0) !important;
+    }
+
+    .scene.is-active .reveal.delay-1 { transition-delay: .15s !important; }
+    .scene.is-active .reveal.delay-2 { transition-delay: .30s !important; }
+    .scene.is-active .reveal.delay-3 { transition-delay: .45s !important; }
+
+    .eyebrow {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 10px;
+      line-height: 1.4;
+      letter-spacing: .26em;
+      text-transform: uppercase;
+    }
+
+    .eyebrow::before {
+      content: "";
+      width: 32px;
+      height: 1px;
+      background: var(--purple);
+    }
+
+    .headline {
+      max-width: 820px;
+      margin: 18px 0 0;
+      font-size: clamp(48px,8.5vw,132px);
+      line-height: .88;
+      letter-spacing: -.075em;
+      font-weight: 750;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    .headline .thin {
+      display: block;
+      font-weight: 300;
+      letter-spacing: -.055em;
+    }
+
+    .subline {
+      margin: 22px 0 0;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(11px,1vw,14px);
+      line-height: 1.8;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    /* SLIDE 1 — HERO */
+    .hero .content {
+      justify-content: flex-start;
+      padding-top: clamp(100px,14vh,170px);
+    }
+
+    .hero-heading {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+    }
+
+    .hero-heading img {
+      width: clamp(52px,7vw,88px);
+      height: auto;
+      filter: drop-shadow(0 2px 9px rgba(0,0,0,.25));
+    }
+
+    .hero-heading .model {
+      margin-top: 3px;
+      font-size: clamp(16px,1.65vw,23px);
+      line-height: 1.2;
+      font-weight: 650;
+      letter-spacing: .015em;
+      white-space: nowrap;
+    }
+
+    .hero-title { max-width: 680px; margin-top: 12px; }
+
+    .hero-title h1 {
+      margin: 0;
+      font-size: clamp(46px,8vw,120px);
+      line-height: .85;
+      letter-spacing: -.085em;
+      text-transform: uppercase;
+    }
+
+    .hero-title p {
+      margin: 22px 0 0;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      letter-spacing: .32em;
+      text-transform: uppercase;
+    }
+
+    /* SLIDE 2 — ADRO branding on the left, description on the right */
+    body.is-enhanced .scene[data-scene="2"] .content {
+      justify-content: center !important;
+      align-items: stretch !important;
+      padding: 0 clamp(20px,3vw,48px) !important;
+    }
+
+    .slide-two-layout {
+      position: relative;
+      display: block;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide-two-brand {
+      position: absolute;
+      left: 0;
+      top: 47%;
+      translate: 0 -50%;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      color: #fff;
+      text-align: left;
+      text-shadow: 0 3px 24px rgba(0,0,0,.28);
+    }
+
+    .slide-two-logo {
+      display: block;
+      width: clamp(125px,15vw,205px);
+      max-height: 105px;
+      height: auto;
+      object-fit: contain;
+      object-position: left center;
+      margin: 0 0 30px;
+      filter: drop-shadow(0 3px 16px rgba(0,0,0,.2));
+    }
+
+    .slide-two-brand .slide-two-title {
+      margin: 0;
+      font-size: clamp(26px,3.6vw,52px);
+      line-height: .98;
+      font-weight: 800;
+      letter-spacing: -.055em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .slide-two-brand .slide-two-subtitle {
+      margin: 14px 0 0;
+      color: rgba(255,255,255,.9);
+      font-size: clamp(11px,1.15vw,15px);
+      line-height: 1.5;
+      font-weight: 750;
+      font-style: italic;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      text-align: left;
+    }
+
+    .slide-two-description {
+      position: absolute;
+      right: 0;
+      top: 53%;
+      translate: 0 -50%;
+      width: min(440px,38vw);
+      margin: 0;
+      padding: 18px 24px 18px 0;
+      border-right: 1px solid rgba(255,255,255,.48);
+      color: rgba(255,255,255,.86);
+      font-size: clamp(12px,1vw,15px);
+      line-height: 1.85;
+      font-weight: 400;
+      letter-spacing: .015em;
+      text-align: right;
+      text-shadow: 0 2px 15px rgba(0,0,0,.35);
+    }
+
+    .slide-two-description p { margin: 0 0 17px; }
+
+    .slide-two-description strong {
+      display: block;
+      margin-top: 4px;
+      color: #fff;
+      font-weight: 900;
+      line-height: 1.65;
+      letter-spacing: .005em;
+    }
+
+    /* SLIDE 3 — AERODYNAMIC DATA */
+    .aero-stats-scene {
+      color: #211923;
+      background: #f1eef3 !important;
+    }
+
+    .aero-stats-scene .stats-visual::after {
+      background: linear-gradient(0deg,rgba(20,14,22,.18),transparent 58%);
+    }
+
+    body.is-enhanced .aero-stats-scene .aero-stats-content {
+      justify-content: flex-end !important;
+      align-items: center !important;
+      padding: 80px clamp(28px,7vw,108px) clamp(38px,6vh,68px) !important;
+      color: #211923;
+    }
+
+    .aero-stats-heading {
+      width: min(1120px,100%);
+      margin: 0 auto clamp(14px,2vh,22px);
+      color: rgba(244,227,255,.993);
+      font-size: 10px;
+      line-height: 1.4;
+      font-weight: 600;
+      letter-spacing: .28em;
+      text-align: center;
+      text-transform: uppercase;
+    }
+
+    .aero-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2,minmax(0,1fr));
+      gap: clamp(16px,2.5vw,34px);
+      width: min(1120px,100%);
+      margin: 0 auto;
+    }
+
+    .aero-stat-card {
+      position: relative;
+      min-width: 0;
+      min-height: clamp(185px,23vh,235px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: clamp(20px,2.5vw,32px);
+      overflow: hidden;
+      background: rgba(255,255,255,.72);
+      border: 1px solid rgba(65,48,73,.12);
+      box-shadow: 0 24px 70px rgba(42,27,50,.07), inset 0 1px 0 rgba(255,255,255,.9);
+      -webkit-backdrop-filter: blur(10px);
+      backdrop-filter: blur(10px);
+    }
+
+    .aero-stat-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 68px;
+      height: 2px;
+      background: #a77ab7;
+    }
+
+    .aero-stat-label {
+      color: #76647d;
+      font-size: 10px;
+      font-weight: 750;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+
+    .aero-stat-number {
+      margin-top: 10px;
+      color: #211923;
+      font-size: clamp(48px,5.8vw,76px);
+      line-height: .92;
+      font-weight: 760;
+      letter-spacing: -.085em;
+      font-variant-numeric: tabular-nums;
+      white-space: nowrap;
+    }
+
+    .aero-stat-number span {
+      margin-left: 7px;
+      color: #9874a5;
+      font-size: .34em;
+      font-weight: 550;
+      letter-spacing: .02em;
+    }
+
+    .aero-stat-rule {
+      width: 100%;
+      height: 1px;
+      margin: clamp(17px,2.5vh,25px) 0 13px;
+      background: linear-gradient(90deg,rgba(87,65,96,.38),rgba(87,65,96,.05));
+    }
+
+    .aero-stat-comparison {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .aero-stat-comparison > span {
+      color: rgba(33,25,35,.58);
+      font-size: 10px;
+      font-weight: 650;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+    }
+
+    .aero-stat-comparison strong {
+      display: inline-flex;
+      align-items: baseline;
+      gap: 10px;
+      color: #211923;
+      font-size: clamp(17px,1.7vw,23px);
+      font-weight: 700;
+      letter-spacing: -.035em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .aero-stat-comparison i {
+      color: #a77ab7;
+      font-size: .85em;
+      font-style: normal;
+      font-weight: 400;
+    }
+
+    /* SLIDE 4 — PERFORMANCE NUMBERS */
+    .stats-scene .content {
+      justify-content: flex-end !important;
+      align-items: flex-start !important;
+      padding-bottom: clamp(76px,12vh,140px) !important;
+    }
+
+    .stats-title {
+      margin-bottom: 30px;
+      color: rgba(255,255,255,.62);
+      font-size: clamp(11px,1vw,14px);
+      letter-spacing: .28em;
+      text-transform: uppercase;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(3,minmax(0,1fr));
+      gap: clamp(16px,4vw,58px);
+      max-width: 850px;
+    }
+
+    .stat {
+      padding-top: 15px;
+      border-top: 1px solid rgba(255,255,255,.42);
+    }
+
+    .stat-label {
+      color: rgba(255,255,255,.68);
+      font-size: clamp(9px,.8vw,11px);
+      letter-spacing: .18em;
+      text-transform: uppercase;
+    }
+
+    .stat-value {
+      margin-top: 12px;
+      color: #e0b4ef;
+      font-size: clamp(25px,4.2vw,58px);
+      font-weight: 650;
+      letter-spacing: -.05em;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-value small {
+      margin-left: 5px;
+      color: rgba(255,255,255,.86);
+      font-size: .38em;
+      letter-spacing: .04em;
+    }
+
+    .footnote {
+      margin-top: 19px;
+      color: rgba(255,255,255,.48);
+      font-size: 9px;
+      letter-spacing: .12em;
+    }
+
+    /* SLIDE 5 — ENGINE */
+    .engine-scene { color: #fff; }
+
+    .engine-scene .content {
+      justify-content: center !important;
+      align-items: flex-start !important;
+      max-width: none !important;
+    }
+
+    .engine-title {
+      margin: 0;
+      font-size: clamp(32px,5vw,68px);
+      line-height: .98;
+      font-weight: 300;
+      letter-spacing: -.055em;
+    }
+
+    .engine-title strong { display: block; font-weight: 750; }
+
+    .engine-rule {
+      width: 1px;
+      height: 1px;
+      margin: 22px 0;
+      background: var(--purple);
+      transition: width .9s ease .35s;
+    }
+
+    .scene.is-active .engine-rule { width: clamp(150px,22vw,290px); }
+
+    .engine-displacement {
+      font-size: clamp(17px,2vw,24px);
+      font-weight: 300;
+      letter-spacing: .06em;
+    }
+
+    .engine-description {
+      max-width: 520px;
+      margin: 20px 0 0;
+      color: rgba(255,255,255,.78);
+      font-size: clamp(12px,1.1vw,15px);
+      line-height: 1.8;
+      letter-spacing: .025em;
+    }
+
+    .engine-description strong { color: #fff; font-weight: 800; }
+
+    /* SLIDE 6 — DETAIL IMAGE */
+    .quiet-scene .content {
+      justify-content: flex-end !important;
+      align-items: flex-start !important;
+      padding-bottom: clamp(56px,9vh,110px) !important;
+    }
+
+    /* SLIDE 7 — VALUES */
+    .rear-scene .content {
+      justify-content: flex-end !important;
+      align-items: flex-end !important;
+      text-align: right;
+      padding-bottom: clamp(80px,12vh,142px) !important;
+    }
+
+    .rear-scene .rear-tagline {
+      width: min(760px,82vw);
+      max-width: 760px;
+      margin: 0;
+      font-size: clamp(28px,4.8vw,68px);
+      line-height: .98;
+      letter-spacing: -.06em;
+      text-transform: uppercase;
+      text-wrap: balance;
+    }
+
+    /* SLIDE 8 — DESIGN DETAIL */
+    .detail-scene .content {
+      justify-content: flex-end !important;
+      align-items: flex-start !important;
+      padding-bottom: clamp(52px,8vh,96px) !important;
+    }
+
+    /* SLIDE 9 — FINAL */
+    .final-scene .content {
+      justify-content: flex-end !important;
+      align-items: flex-end !important;
+      text-align: right;
+      padding-bottom: clamp(60px,10vh,120px) !important;
+    }
+
+    .final-scene .headline {
+      margin-left: auto;
+      font-size: clamp(36px,6.5vw,92px);
+    }
+
+    .final-scene .subline { color: rgba(255,255,255,.62); }
+
+    /* Fixed slide counter */
+    .scene .scene-no { display: none; }
+
+    .scene-no-global {
+      position: fixed;
+      z-index: 36;
+      right: clamp(18px,4vw,64px);
+      bottom: 28px;
+      color: rgba(255,255,255,.62);
+      font-size: 10px;
+      letter-spacing: .2em;
+      font-variant-numeric: tabular-nums;
+      opacity: 0;
+      transform: translate3d(0,10px,0);
+      filter: blur(5px);
+      pointer-events: none;
+      transition: opacity .65s ease, transform .75s cubic-bezier(.2,.7,.2,1), filter .65s ease;
+    }
+
+    .scene-no-global b { color: #fff; font-weight: 500; }
+
+    .scene-no-global.is-visible {
+      opacity: 1;
+      transform: translate3d(0,0,0);
+      filter: blur(0);
+    }
+
+    /* Crossfade layers are fixed only during the designated transitions. */
+    .visual.is-crossfade-layer {
+      position: fixed !important;
+      inset: 0 !important;
+      width: 100vw !important;
+      height: 100svh !important;
+      z-index: 2 !important;
+      opacity: 1;
+      will-change: opacity, transform;
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+      contain: paint;
+    }
+
+    .visual.is-crossfade-layer img {
+      transform: translate3d(0, 0, 0);
+      backface-visibility: hidden;
+    }
+
+    /* Footer */
+    footer.adro-footer {
+      position: relative;
+      z-index: 1;
+      display: block;
+      min-height: 0;
+      padding: 0 clamp(24px,6vw,88px);
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,.12);
+      background: #0d0b0f;
+      color: #f7f5f7;
+      font-size: 12px;
+      letter-spacing: normal;
+      text-transform: none;
+      scroll-snap-align: none;
+    }
+
+    footer.adro-footer a { color: inherit; text-decoration: none; }
+    footer.adro-footer a:hover { color: #d9a7e8; }
+
+    .footer-main {
+      display: grid;
+      grid-template-columns: minmax(220px,1.55fr) repeat(3,minmax(120px,1fr));
+      gap: clamp(28px,5vw,72px);
+      padding: 58px 0 54px;
+    }
+
+    .footer-wordmark {
+      display: inline-block;
+      margin: -8px 0 12px;
+      color: #fff !important;
+      font-size: clamp(40px,5.2vw,62px);
+      line-height: 1;
+      font-weight: 850;
+      letter-spacing: -.095em;
+    }
+
+    .footer-logo {
+      display: block;
+      width: 126px;
+      height: 76px;
+      object-fit: contain;
+      filter: brightness(0) invert(1);
+    }
+
+    .footer-brand-note {
+      margin: 0 0 34px;
+      color: rgba(255,255,255,.46);
+      font-size: 9px;
+      letter-spacing: .13em;
+      text-transform: uppercase;
+    }
+
+    .footer-contact-label {
+      margin: 0 0 12px;
+      color: #d9a7e8;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: .24em;
+      text-transform: uppercase;
+    }
+
+    .footer-brand-block > a:not(.footer-wordmark) {
+      display: block;
+      width: fit-content;
+      margin: 7px 0;
+      color: rgba(255,255,255,.78);
+      font-size: 11px;
+      letter-spacing: .04em;
+    }
+
+    .footer-links h3 {
+      margin: 4px 0 22px;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 750;
+      letter-spacing: .2em;
+    }
+
+    .footer-links a {
+      display: block;
+      width: fit-content;
+      margin: 0 0 14px;
+      color: rgba(255,255,255,.58) !important;
+      font-size: 11px;
+      line-height: 1.5;
+      letter-spacing: .035em;
+      transition: color .2s ease, transform .2s ease;
+    }
+
+    .footer-links a:hover { color: #fff !important; transform: translateX(3px); }
+
+    .footer-bottom {
+      min-height: 64px;
+      display: grid;
+      grid-template-columns: 1fr;
+      justify-items: start;
+      align-items: center;
+      padding: 18px 0;
+      border-top: 1px solid rgba(255,255,255,.16);
+      color: rgba(255,255,255,.38);
+      font-size: 8px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+    }
+
+    .footer-bottom p { margin: 0; }
+
+    footer.adro-footer > * {
+      opacity: 0;
+      transform: translate3d(0,16px,0);
+      filter: blur(5px);
+      transition: opacity .8s ease, transform .85s cubic-bezier(.2,.7,.2,1), filter .8s ease;
+    }
+
+    footer.adro-footer.is-in > * {
+      opacity: 1;
+      transform: translate3d(0,0,0);
+      filter: blur(0);
+    }
+
+    /* Slide 9 copy returns to normal page flow as the footer enters. */
+    body.is-footer-flow main .scene[data-scene="9"] .content {
+      position: absolute !important;
+      inset: 0 !important;
+      width: 100% !important;
+      height: 100% !important;
+      padding: clamp(28px,7vw,108px) !important;
+      padding-bottom: clamp(60px,10vh,120px) !important;
+      opacity: 1 !important;
+      visibility: visible !important;
+      pointer-events: none !important;
+    }
+
+    body.is-footer-flow .scene-no-global {
+      opacity: 0 !important;
+      visibility: hidden !important;
+    }
+
+    /* Responsive navigation and slides */
+    @media (max-width: 1100px) and (min-width: 701px) {
+      .slide-two-description {
+        width: 36vw;
+        font-size: 12px;
+        line-height: 1.7;
+      }
+
+      .slide-two-brand .slide-two-title {
+        font-size: clamp(25px,3.2vw,38px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      .topbar, .topbar.scrolled {
+        column-gap: 12px;
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      .brand-logo { width: 68px; height: 52px; }
+      .topnav { gap: 20px; }
+      .topnav a { font-size: 9px; letter-spacing: .1em; }
+    }
+
+    @media (max-width: 760px) {
+      footer.adro-footer { padding: 0 22px; }
+      .footer-main {
+        grid-template-columns: repeat(2,minmax(0,1fr));
+        gap: 38px 28px;
+        padding: 42px 0;
+      }
+      .footer-brand-block { grid-column: 1 / -1; }
+      .footer-brand-note { margin-bottom: 24px; }
+    }
+
+    @media (max-width: 700px) {
+      :root { --nav-h: 64px; }
+
+      .topbar, .topbar.scrolled {
+        grid-template-columns: minmax(0,1fr) auto minmax(22px,auto);
+        column-gap: 8px;
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .brand { gap: 6px; }
+      .brand-logo { width: 62px; height: 48px; }
+      .brand img:nth-child(2) { margin-left: 3px; width: 13px; height: 13px; }
+      .brand-tagline {
+        max-width: 90px;
+        white-space: normal;
+        font-size: 7px;
+        letter-spacing: .07em;
+        line-height: 1.15;
+      }
+
+      .topnav { gap: 10px; }
+      .topnav a { font-size: 7px; letter-spacing: .07em; }
+      .nav-connect { width: 24px; height: 28px; }
+      .nav-connect svg { width: 17px; height: 17px; }
+
+      .scene { height: 100svh; min-height: 100svh; }
+      .visual img { object-position: 55% center; }
+      .scene .content { padding-left: 22px; padding-right: 22px; }
+      .hero .content { padding-top: 108px; }
+      .hero-heading .model { font-size: clamp(13px,3.7vw,18px); white-space: normal; }
+      .hero-title { margin-top: 12px; }
+
+      /* On mobile, slide 2 becomes a readable vertical stack. */
+      body.is-enhanced .scene[data-scene="2"] .content { padding: 0 22px !important; }
+      .slide-two-layout {
+        display: flex;
+        width: min(88vw,520px);
+        height: auto;
+        flex-direction: column;
+        gap: 22px;
+      }
+      .slide-two-brand {
+        position: relative;
+        left: auto;
+        top: auto;
+        translate: none;
+      }
+      .slide-two-logo { width: 112px; max-height: 75px; margin-bottom: 18px; }
+      .slide-two-brand .slide-two-title { font-size: 25px; }
+      .slide-two-description {
+        position: relative;
+        right: auto;
+        top: auto;
+        translate: none;
+        width: 100%;
+        max-width: 100%;
+        padding: 14px 16px;
+        border-right: 0;
+        border-left: 1px solid rgba(255,255,255,.55);
+        background: rgba(15,10,18,.55);
+        -webkit-backdrop-filter: blur(6px);
+        backdrop-filter: blur(6px);
+        font-size: 11px;
+        line-height: 1.6;
+        text-align: left;
+      }
+      .slide-two-description p { margin-bottom: 10px; }
+
+      .stats-scene .content { padding-bottom: 86px !important; }
+      .stats { gap: 12px; }
+      .stat-value { font-size: clamp(21px,7vw,34px); }
+      .stat-label { font-size: 8px; letter-spacing: .11em; }
+
+      body.is-enhanced .aero-stats-scene .aero-stats-content {
+        justify-content: flex-end !important;
+        padding: 70px 20px 34px !important;
+      }
+      .aero-stats-heading { margin-bottom: 16px; font-size: 8px; letter-spacing: .2em; }
+      .aero-stats-grid { gap: 12px; }
+      .aero-stat-card { min-height: 0; padding: 16px 14px; }
+      .aero-stat-label { font-size: 8px; }
+      .aero-stat-number { margin-top: 8px; font-size: clamp(34px,8vw,52px); }
+      .aero-stat-rule { margin: 13px 0 10px; }
+      .aero-stat-comparison { gap: 6px; }
+      .aero-stat-comparison > span { font-size: 8px; letter-spacing: .08em; }
+      .aero-stat-comparison strong { gap: 6px; font-size: clamp(14px,4vw,18px); }
+
+      .engine-description { max-width: 90vw; font-size: 12px; }
+      .rear-scene .rear-tagline { width: min(88vw,560px); font-size: clamp(27px,7vw,42px); }
+      .scene-no-global { right: 20px; bottom: 18px; }
+
+      .footer-main { gap: 38px 28px; }
+      .footer-links h3 { font-size: 8px; }
+      .footer-links a { font-size: 10px; }
+    }
+
+    @media (max-width: 420px) {
+      .brand-tagline { max-width: 72px; font-size: 6px; }
+      .topnav { gap: 7px; }
+      .topnav a { font-size: 6.5px; letter-spacing: .045em; }
+      .nav-connect { width: 20px; }
+      .brand-logo { width: 54px; height: 42px; }
+      .stats { grid-template-columns: 1fr; max-width: 210px; gap: 10px; }
+      .stat {
+        display: grid;
+        grid-template-columns: 1fr auto;
+        align-items: center;
+        padding-top: 8px;
+      }
+      .stat-value { margin-top: 0; }
+      .stats-scene .content { padding-bottom: 65px !important; }
+      .aero-stat-card { padding: 17px 13px; }
+      .aero-stat-number { font-size: 34px; }
+      .aero-stat-comparison { align-items: flex-start; flex-direction: column; }
+      .rear-scene .rear-tagline { font-size: clamp(24px,7vw,32px); }
+      .footer-main { gap: 34px 18px; }
+      .footer-bottom { font-size: 7px; letter-spacing: .1em; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; scroll-snap-type: none; }
+      *, *::before, *::after {
+        animation-duration: .01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: .01ms !important;
+      }
+      .reveal, .scene-no-global {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+        transition: none !important;
+      }
+      .topbar { animation: none !important; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="progress-track" aria-hidden="true">
+    <div class="progress-bar" id="progress"></div>
+  </div>
+
+  <header class="topbar" id="topbar">
+    <a class="brand" href="#top" aria-label="Retour au début">
+      <img class="brand-logo" src="assets/adro-logo.svg" alt="Logo ADRO">
+      <img src="assets/bmw-roundel.png" alt="">
+      <span class="brand-tagline">V2 carbon fiber full body-kit</span>
+    </a>
+
+    <nav class="topnav" aria-label="Navigation principale">
+      <a href="#adro" data-nav="performance">Performance</a>
+      <a href="#rear" data-nav="values">Our values</a>
+    </nav>
+
+    <span class="nav-connect" aria-label="Connect" title="Connect">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+        <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+      </svg>
+    </span>
+  </header>
+
+  <main>
+    <!-- SLIDE 1 -->
+    <section class="scene hero" id="top" data-scene="1">
+      <div class="visual">
+        <img src="assets/bmw-g82-hero.jpg" alt="Vue aérienne d'une BMW G82 violette" fetchpriority="high">
+      </div>
+      <div class="content">
+        <div class="hero-heading reveal">
+          <img src="assets/m4-competition-logo.png" alt="BMW">
+          <div class="model">2021+ BMW M4 G82</div>
+        </div>
+        <div class="hero-title reveal delay-1">
+          <h1>Built to<br><span class="thin">stand out.</span></h1>
+          <p>V2 carbon fiber full body-kit</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 2 -->
+    <section class="scene light" id="front" data-scene="2">
+      <div class="visual">
+        <img src="assets/bmw-g82-front.jpg" alt="Face avant de la BMW M4 Competition violette" loading="lazy">
+      </div>
+      <div class="content">
+        <div class="slide-two-layout">
+          <div class="slide-two-brand reveal">
+            <img class="slide-two-logo" src="assets/adro-logo-darkpink.png" alt="ADRO">
+            <p class="slide-two-title">Carbon Fiber<br>Body Kit V2</p>
+            <p class="slide-two-subtitle">Aggressive. Loud. Breathtaking.</p>
+          </div>
+
+          <div class="slide-two-description reveal delay-1">
+            <p>
+              The ADRO BMW M4 body kit redefines the G82's presence through
+              precision engineering and uncompromising design. Every detail
+              is crafted to complement the M4's character while enhancing
+              aerodynamic performance.
+            </p>
+            <strong>A perfect balance of innovation, quality and motorsport-inspired design.</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3 -->
+    <section class="scene aero-stats-scene" id="adro" data-scene="3">
+      <div class="visual stats-visual" aria-hidden="true">
+        <img src="assets/bmw-g82-adro-intro.jpg" alt="BMW M4 G82 équipée du kit ADRO" loading="lazy">
+      </div>
+      <div class="content aero-stats-content">
+        <div class="aero-stats-heading reveal">Aerodynamic performance</div>
+        <div class="aero-stats-grid reveal delay-1">
+          <article class="aero-stat-card">
+            <div class="aero-stat-label">Downforce</div>
+            <div class="aero-stat-number">+1,104<span>N</span></div>
+            <div class="aero-stat-rule"></div>
+            <div class="aero-stat-comparison">
+              <span>Downforce (N)</span>
+              <strong><span>171</span><i>→</i><span>1275</span></strong>
+            </div>
+          </article>
+          <article class="aero-stat-card">
+            <div class="aero-stat-label">Drag</div>
+            <div class="aero-stat-number">+185<span>N</span></div>
+            <div class="aero-stat-rule"></div>
+            <div class="aero-stat-comparison">
+              <span>Drag (N)</span>
+              <strong><span>939</span><i>→</i><span>1305</span></strong>
+            </div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4 -->
+    <section class="scene stats-scene" id="performance" data-scene="4">
+      <div class="visual">
+        <img src="assets/bmw-g82-performance.jpg" alt="BMW G82 violette dans une ambiance sombre" loading="lazy">
+      </div>
+      <div class="content">
+        <div class="stats-title reveal">Powered by the S58</div>
+        <div class="stats">
+          <div class="stat reveal delay-1">
+            <div class="stat-label">Power</div>
+            <div class="stat-value"><span data-count="510">0</span><small>ch</small></div>
+          </div>
+          <div class="stat reveal delay-2">
+            <div class="stat-label">0–100 km/h</div>
+            <div class="stat-value"><span data-count="3.5" data-decimals="1">0</span><small>s</small></div>
+          </div>
+          <div class="stat reveal delay-3">
+            <div class="stat-label">Max speed*</div>
+            <div class="stat-value"><span data-count="290">0</span><small>km/h</small></div>
+          </div>
+        </div>
+        <div class="footnote reveal delay-3">Manufacturer's stated figures.</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5 -->
+    <section class="scene engine-scene" id="engine" data-scene="5">
+      <div class="visual">
+        <img src="assets/bmw-s58-engine.jpg" alt="Vue du moteur de la BMW G82" loading="lazy">
+      </div>
+      <div class="content">
+        <div class="eyebrow reveal">Powertrain</div>
+        <h2 class="engine-title reveal delay-1">Inline 6<strong>Turbo</strong></h2>
+        <div class="engine-rule"></div>
+        <div class="engine-displacement reveal delay-2">2,993 cm³</div>
+        <p class="engine-description reveal delay-3">
+          A high-performance engine engineered to complement the bodykit’s aggressive styling, delivering enhanced
+          power, sharper performance, and an unmistakable street presence.
+          <strong>Built to turn heads and dominate the road, every detail is designed to make a statement.</strong>
+        </p>
+      </div>
+    </section>
+
+    <!-- SLIDE 6 -->
+    <section class="scene quiet-scene" id="details" data-scene="6">
+      <div class="visual">
+        <img src="assets/bmw-g82-carbon-details.jpg" alt="Vue détaillée du capot et de la partie avant de la BMW G82" loading="lazy">
+      </div>
+    </section>
+
+    <!-- SLIDE 7 -->
+    <section class="scene rear-scene" id="rear" data-scene="7">
+      <div class="visual">
+        <img src="assets/bmw-g82-rear.jpg" alt="Aileron et diffuseur arrière en carbone de la BMW G82" loading="lazy">
+      </div>
+      <div class="content">
+        <h2 class="headline reveal rear-tagline">When quality<br><span class="thin">meets performance</span></h2>
+      </div>
+    </section>
+
+    <!-- SLIDE 8 -->
+    <section class="scene detail-scene" id="design" data-scene="8">
+      <div class="visual">
+        <img src="assets/bmw-g82-design.jpg" alt="Gros plan sur les feux arrière de la BMW G82" loading="lazy">
+      </div>
+    </section>
+
+    <!-- SLIDE 9 -->
+    <section class="scene final-scene" id="final" data-scene="9">
+      <div class="visual">
+        <img src="assets/bmw-g82-final.jpg" alt="Vue arrière sombre de la BMW G82 violette" loading="lazy">
+      </div>
+      <div class="content">
+        <h2 class="headline reveal delay-1">Leave a<br><span class="thin">lasting mark.</span></h2>
+        <p class="subline reveal delay-2">ADRO carbon fiber bodykit</p>
+      </div>
+    </section>
+  </main>
+
+  <div class="scene-no-global" id="sceneNoGlobal" aria-live="polite"><b>01</b> / 09</div>
+
+  <footer class="adro-footer" id="adro-footer">
+    <div class="footer-main">
+      <div class="footer-brand-block">
+        <a class="footer-wordmark" href="https://global.adro.com/" aria-label="ADRO — official website">
+          <img class="footer-logo" src="assets/adro-logo.svg" alt="ADRO">
+        </a>
+        <p class="footer-brand-note">Aerodynamic Development &amp; Race Optimization.</p>
+        <p class="footer-contact-label">GLOBAL HEADQUARTERS</p>
+        <a href="tel:+821058481151">+82 10-5848-1151</a>
+        <a href="mailto:sales.global@adro.com">sales.global@adro.com</a>
+      </div>
+
+      <nav class="footer-links" aria-label="Shop and services">
+        <h3>SHOP</h3>
+        <a href="">Shop all</a>
+        <a href="">Installation guides</a>
+        <a href="">Find a dealer</a>
+      </nav>
+
+      <nav class="footer-links" aria-label="About ADRO">
+        <h3>DISCOVER</h3>
+        <a href="">Brand story</a>
+        <a href="">Contact us</a>
+        <a href="">FAQ</a>
+      </nav>
+
+      <nav class="footer-links" aria-label="Customer information">
+        <h3>INFORMATION</h3>
+        <a href="">Shipping &amp; returns</a>
+        <a href="">Privacy policy</a>
+        <a href="">Terms of service</a>
+      </nav>
+    </div>
+
+    <div class="footer-bottom">
+      <p>© 2026 ADRO Inc. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    (() => {
+      const scenes = [...document.querySelectorAll('main .scene[data-scene]')];
+      const progressBar = document.getElementById('progress');
+      const pageNumber = document.getElementById('sceneNoGlobal');
+      const navLinks = [...document.querySelectorAll('.topnav a')];
+      const footer = document.querySelector('footer.adro-footer');
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      const crossfadePairs = [
+        { from: '3', to: '4' },
+        { from: '5', to: '6' },
+        { from: '7', to: '8' },
+        { from: '8', to: '9' }
+      ];
+
+      const crossfadeIds = new Set(crossfadePairs.flatMap(pair => [pair.from, pair.to]));
+      const sceneById = new Map(scenes.map(scene => [scene.dataset.scene, scene]));
+      const visualById = new Map(
+        scenes
+          .map(scene => [scene.dataset.scene, scene.querySelector('.visual')])
+          .filter(([, visual]) => visual)
+      );
+
+      const clamp = (value, min, max) => Math.max(min, Math.min(max, value));
+      const smoothstep = (a, b, value) => {
+        const t = clamp((value - a) / (b - a), 0, 1);
+        return t * t * (3 - 2 * t);
+      };
+
+      let activeScene = null;
+      let ticking = false;
+      let activeCrossfadeKey = '';
+      let activeCrossfadeIds = [];
+      // During a fade, use viewport-level image copies rather than fixing the
+      // original .visual elements inside their scrolling section ancestors.
+      const activeCrossfadeLayers = new Map();
+
+      // Wheel movement is interpolated with requestAnimationFrame while crossing a fade.
+      // This fills the gaps between discrete mouse-wheel steps without changing the fade logic.
+      let wheelAnimationActive = false;
+      let wheelAnimationFrame = 0;
+      let wheelTargetScroll = 0;
+      let wheelLastTimestamp = 0;
+      let previousScrollBehavior = '';
+      const wheelSmoothingMs = 125;
+
+      document.body.classList.add('is-enhanced');
+
+      /* Decode images used by the crossfade transitions before they are needed. */
+      scenes.forEach(scene => {
+        const img = scene.querySelector('.visual img');
+        if (!img) return;
+        img.loading = 'eager';
+        img.decoding = 'async';
+        if (crossfadeIds.has(scene.dataset.scene) && img.decode) {
+          img.decode().catch(() => {});
+        }
+      });
+
+      function clearCrossfade() {
+        activeCrossfadeIds.forEach(id => {
+          const original = visualById.get(id);
+          if (original) {
+            original.style.removeProperty('visibility');
+          }
+
+          const layer = activeCrossfadeLayers.get(id);
+          if (layer) layer.remove();
+        });
+
+        activeCrossfadeLayers.clear();
+        activeCrossfadeIds = [];
+        activeCrossfadeKey = '';
+      }
+
+      function createViewportLayer(id) {
+        const original = visualById.get(id);
+        if (!original) return null;
+
+        // Clone the whole visual so its image and its ::after shading overlay
+        // remain identical, but put the clone directly under <body>.
+        const layer = original.cloneNode(true);
+        layer.classList.add('is-crossfade-layer');
+
+        // Preserve the exact overlay used by the source slide after the clone
+        // is moved out of the section and attached directly to <body>.
+        const sourceScene = sceneById.get(id);
+        if (sourceScene?.classList.contains('light')) {
+          layer.classList.add('is-light-crossfade-layer');
+        }
+        if (sourceScene?.classList.contains('aero-stats-scene')) {
+          layer.classList.add('is-aero-crossfade-layer');
+        }
+        if (sourceScene?.classList.contains('engine-scene')) {
+          layer.classList.add('is-engine-crossfade-layer');
+        }
+        if (sourceScene?.classList.contains('final-scene')) {
+          layer.classList.add('is-final-crossfade-layer');
+        }
+
+        layer.style.setProperty('position', 'fixed', 'important');
+        layer.style.setProperty('inset', '0', 'important');
+        layer.style.setProperty('width', '100vw', 'important');
+        layer.style.setProperty('height', '100svh', 'important');
+        layer.style.setProperty('z-index', '2', 'important');
+        layer.style.setProperty('pointer-events', 'none', 'important');
+        layer.style.setProperty('opacity', '1');
+        layer.style.setProperty('visibility', 'visible');
+
+        const image = layer.querySelector('img');
+        if (image) {
+          image.loading = 'eager';
+          image.decoding = 'async';
+        }
+
+        // Hide the original in-flow image while its fixed copy is displayed.
+        original.style.setProperty('visibility', 'hidden');
+        document.body.appendChild(layer);
+        activeCrossfadeLayers.set(id, layer);
+        return layer;
+      }
+
+      function updateCrossfade(scrollTop) {
+        let selected = null;
+        let progress = 0;
+
+        for (const pair of crossfadePairs) {
+          const fromScene = sceneById.get(pair.from);
+          const toScene = sceneById.get(pair.to);
+          if (!fromScene || !toScene) continue;
+
+          // getBoundingClientRect() is measured at the browser's CURRENT
+          // scroll position, not at the interpolated target passed to this
+          // function. Use the actual position to convert rects into document
+          // coordinates, then use scrollTop only for the fade progress.
+          const actualScrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+          const start = fromScene.getBoundingClientRect().top + actualScrollTop;
+          const end = toScene.getBoundingClientRect().top + actualScrollTop;
+
+          if (scrollTop >= start && scrollTop <= end && end > start) {
+            selected = pair;
+            progress = clamp((scrollTop - start) / (end - start), 0, 1);
+            break;
+          }
+        }
+
+        if (!selected) {
+          if (activeCrossfadeKey) clearCrossfade();
+          return;
+        }
+
+        const key = `${selected.from}-${selected.to}`;
+        if (key !== activeCrossfadeKey) {
+          clearCrossfade();
+          activeCrossfadeKey = key;
+          activeCrossfadeIds = [selected.from, selected.to];
+          activeCrossfadeIds.forEach(id => createViewportLayer(id));
+        }
+
+        const outgoing = activeCrossfadeLayers.get(selected.from);
+        const incoming = activeCrossfadeLayers.get(selected.to);
+        if (!outgoing || !incoming) return;
+
+        const incomingOpacity = reduceMotion
+          ? (progress >= .5 ? 1 : 0)
+          : smoothstep(.5, 1, progress);
+        const outgoingOpacity = reduceMotion
+          ? (progress >= .5 ? 0 : 1)
+          : 1 - smoothstep(.75, 1, progress);
+
+        outgoing.style.opacity = outgoingOpacity.toFixed(4);
+        incoming.style.opacity = incomingOpacity.toFixed(4);
+      }
+
+      function updateSnapMode(scrollTop) {
+        const root = document.documentElement;
+
+        if (reduceMotion) {
+          root.style.scrollSnapType = 'none';
+          return;
+        }
+
+        // Do not let mandatory snapping interrupt an in-progress smoothed wheel movement.
+        if (wheelAnimationActive) {
+          root.style.scrollSnapType = 'none';
+          return;
+        }
+
+        const actualScrollTop = window.scrollY || root.scrollTop || 0;
+
+        // Keep scroll snapping disabled throughout every fade, in both directions.
+        const insideCrossfade = crossfadePairs.some(pair => {
+          const fromScene = sceneById.get(pair.from);
+          const toScene = sceneById.get(pair.to);
+          if (!fromScene || !toScene) return false;
+
+          const start = fromScene.getBoundingClientRect().top + actualScrollTop;
+          const end = toScene.getBoundingClientRect().top + actualScrollTop;
+
+          return scrollTop >= start - 1 && scrollTop <= end + 1;
+        });
+
+        const finalScene = sceneById.get('9');
+        const finalTop = finalScene
+          ? finalScene.getBoundingClientRect().top + actualScrollTop
+          : Infinity;
+        const movingThroughFinalOrFooter = scrollTop > finalTop + 1;
+
+        if (insideCrossfade || movingThroughFinalOrFooter) {
+          root.style.scrollSnapType = 'none';
+        } else {
+          root.style.removeProperty('scroll-snap-type');
+        }
+      }
+
+      function animateCounters(section) {
+        section.querySelectorAll('[data-count]').forEach(element => {
+          if (element.dataset.done) return;
+          element.dataset.done = '1';
+
+          const target = Number(element.dataset.count);
+          const decimals = Number(element.dataset.decimals || 0);
+          const start = performance.now();
+          const duration = reduceMotion ? 1 : 1450;
+
+          const draw = now => {
+            const t = Math.min(1, (now - start) / duration);
+            const eased = 1 - Math.pow(1 - t, 3);
+            element.textContent = (target * eased).toFixed(decimals).replace('.', ',');
+            if (t < 1) requestAnimationFrame(draw);
+            else element.textContent = target.toFixed(decimals).replace('.', ',');
+          };
+
+          requestAnimationFrame(draw);
+        });
+      }
+
+      function updatePageNumber(scene) {
+        if (!pageNumber) return;
+        pageNumber.classList.remove('is-visible');
+        if (!scene) return;
+
+        const number = String(scene.dataset.scene).padStart(2, '0');
+        const strong = pageNumber.querySelector('b');
+        if (strong) strong.textContent = number;
+        requestAnimationFrame(() => pageNumber.classList.add('is-visible'));
+      }
+
+      function updateActiveScene(scene) {
+        if (scene === activeScene) return;
+        if (activeScene) activeScene.classList.remove('is-active');
+        activeScene = scene;
+
+        if (activeScene) {
+          activeScene.classList.add('is-active');
+          if (activeScene.dataset.scene === '4') animateCounters(activeScene);
+        }
+
+        updatePageNumber(activeScene);
+
+        const activeId = activeScene ? activeScene.id : '';
+        navLinks.forEach(link => {
+          const href = link.getAttribute('href');
+          const active =
+            (href === '#adro' && ['adro', 'performance', 'engine', 'details'].includes(activeId)) ||
+            (href === '#rear' && ['rear', 'design', 'final'].includes(activeId));
+          link.classList.toggle('active', active);
+        });
+      }
+
+      function update() {
+        const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
+        const scrollTop = window.scrollY || document.documentElement.scrollTop;
+        const maxScroll = document.documentElement.scrollHeight - viewportHeight;
+
+        if (progressBar) {
+          progressBar.style.width = (maxScroll > 0 ? scrollTop / maxScroll * 100 : 0) + '%';
+        }
+
+        let nearest = null;
+        let nearestDistance = Infinity;
+        const viewportCenter = viewportHeight / 2;
+
+        scenes.forEach(scene => {
+          const rect = scene.getBoundingClientRect();
+          const sceneCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(sceneCenter - viewportCenter);
+          if (distance < nearestDistance) {
+            nearestDistance = distance;
+            nearest = scene;
+          }
+        });
+
+        updateCrossfade(scrollTop);
+        updateSnapMode(scrollTop);
+
+        const finalScene = sceneById.get('9');
+        const footerRect = footer ? footer.getBoundingClientRect() : null;
+        const footerFlow = Boolean(finalScene && footerRect && footerRect.top < viewportHeight);
+        document.body.classList.toggle('is-footer-flow', footerFlow);
+
+        if (footerRect) {
+          const footerDistance = Math.abs((footerRect.top + footerRect.height / 2) - viewportCenter);
+          if (footerRect.height > 0 && footerRect.top < viewportHeight && footerDistance < nearestDistance) {
+            nearest = null;
+          }
+          if (footerRect.top < viewportHeight * .9) footer.classList.add('is-in');
+        }
+
+        updateActiveScene(nearest);
+        ticking = false;
+      }
+
+      function requestUpdate() {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      }
+
+      function animateWheelScroll(timestamp) {
+        if (!wheelAnimationActive) {
+          wheelAnimationFrame = 0;
+          return;
+        }
+
+        const root = document.documentElement;
+        const currentScroll = window.scrollY || root.scrollTop || 0;
+        const elapsed = wheelLastTimestamp
+          ? Math.min(timestamp - wheelLastTimestamp, 32)
+          : 16;
+        wheelLastTimestamp = timestamp;
+
+        // Exponential easing is frame-rate independent and keeps the fade moving
+        // continuously between individual wheel events.
+        const progress = 1 - Math.exp(-elapsed / wheelSmoothingMs);
+        const nextScroll = currentScroll + (wheelTargetScroll - currentScroll) * progress;
+
+        if (Math.abs(wheelTargetScroll - nextScroll) < 0.6) {
+          window.scrollTo({ left: 0, top: wheelTargetScroll, behavior: 'auto' });
+          const finalScroll = window.scrollY || root.scrollTop || wheelTargetScroll;
+          updateCrossfade(finalScroll);
+
+          wheelAnimationActive = false;
+          wheelAnimationFrame = 0;
+          wheelLastTimestamp = 0;
+          root.style.scrollBehavior = previousScrollBehavior;
+          updateSnapMode(finalScroll);
+          requestUpdate();
+          return;
+        }
+
+        window.scrollTo({ left: 0, top: nextScroll, behavior: 'auto' });
+        updateCrossfade(nextScroll);
+        wheelAnimationFrame = requestAnimationFrame(animateWheelScroll);
+      }
+
+      window.addEventListener('wheel', event => {
+        if (reduceMotion || event.ctrlKey || event.deltaY === 0) return;
+
+        const root = document.documentElement;
+        const currentScroll = window.scrollY || root.scrollTop || 0;
+        const multiplier = event.deltaMode === 1
+          ? 16
+          : event.deltaMode === 2
+            ? window.innerHeight
+            : 1;
+        const delta = event.deltaY * multiplier;
+        const maxScroll = Math.max(0, root.scrollHeight - window.innerHeight);
+        const baseTarget = wheelAnimationActive ? wheelTargetScroll : currentScroll;
+        const targetScroll = clamp(baseTarget + delta, 0, maxScroll);
+        const low = Math.min(currentScroll, targetScroll);
+        const high = Math.max(currentScroll, targetScroll);
+
+        // Intercept only when this movement enters/crosses a fade, or when a
+        // previous smoothed wheel movement is still running.
+        const crossesFade = wheelAnimationActive || crossfadePairs.some(pair => {
+          const fromScene = sceneById.get(pair.from);
+          const toScene = sceneById.get(pair.to);
+          if (!fromScene || !toScene) return false;
+
+          const start = fromScene.getBoundingClientRect().top + currentScroll;
+          const end = toScene.getBoundingClientRect().top + currentScroll;
+          return high >= start - 1 && low <= end + 1;
+        });
+
+        if (!crossesFade) {
+          updateSnapMode(targetScroll);
+          return;
+        }
+
+        event.preventDefault();
+
+        if (!wheelAnimationActive) {
+          wheelAnimationActive = true;
+          wheelTargetScroll = currentScroll;
+          wheelLastTimestamp = 0;
+          previousScrollBehavior = root.style.scrollBehavior;
+          root.style.scrollBehavior = 'auto';
+        }
+
+        // Queue wheel input instead of jumping directly by the wheel delta.
+        wheelTargetScroll = targetScroll;
+        root.style.scrollSnapType = 'none';
+
+        // Create the fixed image layers before the first interpolated frame is painted.
+        updateCrossfade(currentScroll);
+
+        if (!wheelAnimationFrame) {
+          wheelAnimationFrame = requestAnimationFrame(animateWheelScroll);
+        }
+      }, { passive: false });
+
+      window.addEventListener('scroll', requestUpdate, { passive: true });
+      window.addEventListener('resize', requestUpdate, { passive: true });
+      window.addEventListener('load', requestUpdate, { once: true });
+      requestUpdate();
+    })();
+  </script>
+</body>
+</html>
